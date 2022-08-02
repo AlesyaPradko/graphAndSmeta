@@ -1,0 +1,128 @@
+﻿<Page x:Class="WpfAppSmetaGraf.View.PageTE"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WpfAppSmetaGraf.ViewModel"
+      mc:Ignorable="d" 
+      Title="Page1">
+    <Page.DataContext>
+        <local:MainPageViewModel></local:MainPageViewModel>
+    </Page.DataContext>
+    <Page.Resources>
+        <Style x:Key="SButton" TargetType="{x:Type Button}" BasedOn="{x:Null}">
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Height" Value="Auto"/>
+            <Setter Property="Width" Value="Auto"/>
+        </Style>
+        <Style x:Key="SLabel" TargetType="{x:Type Label}" BasedOn="{x:Null}">
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+        </Style>
+        <Style x:Key="SComboBox" TargetType="{x:Type ComboBox}" BasedOn="{x:Null}">
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Height" Value="Auto"/>
+            <Setter Property="Width" Value="Auto"/>
+            <Setter Property="MinHeight" Value="20"/>
+            <Setter Property="MinWidth" Value="100"/>
+            <Setter Property="IsEditable" Value="False"/>
+        </Style>
+        <Style x:Key="STextBox" TargetType="{x:Type TextBox}" BasedOn="{x:Null}">
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Background" Value="LightGray"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="AcceptsReturn" Value="True"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+    </Page.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="0.7*"/>
+            <RowDefinition/>
+            <RowDefinition Height="0.8*"/>
+            <RowDefinition Height="1.5*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Button  Content="Выбрать папку &#xD;&#xA;   со сметами" Style="{StaticResource SButton}" Margin="10,20,10,20" 
+                     Command="{Binding AddFolder}" CommandParameter="ChangeFolderSmeta" >
+            <Button.ToolTip>
+                <ToolTip>
+                    Выберите папку на вашем компьютере, содержащую сметы в формате .xlsx
+                </ToolTip>
+            </Button.ToolTip>
+        </Button>
+        <Button Grid.Column="1" Content="Выбрать папку &#xD;&#xA;с актами КС-2" Style="{StaticResource SButton}" Margin="10,20,10,20" 
+                 Command="{Binding AddFolder}" CommandParameter="ChangeFolderKS">
+            <Button.ToolTip>
+                <ToolTip>
+                    Выберите папку на вашем компьютере, содержащую акты КС-2 в формате .xlsx
+                </ToolTip>
+            </Button.ToolTip>
+        </Button>
+        <Button Grid.Column="2" Content="    Выбрать папку для &#xA;сохранения ведомостей" Style="{StaticResource SButton}" Margin="10,20,10,20" 
+                Command="{Binding AddFolder}" CommandParameter="SaveCopySmeta">
+            <Button.ToolTip>
+                <ToolTip>
+                    Выберите папку на вашем компьютере, куда вы хотите сохранить ведомости выполненных работ
+                </ToolTip>
+            </Button.ToolTip>
+        </Button>
+        <StackPanel Grid.Row="1" Grid.ColumnSpan="3" Orientation="Vertical">
+            <Label FontWeight="Medium"  Margin="10,0,0,0" Style="{StaticResource SLabel}" Content="Выберите размер шрифта"/>
+            <ComboBox Name="List" Style="{StaticResource SComboBox}" Margin="20,0,300,0" SelectedIndex="{Binding Path=IndexFontSize, Mode=OneWayToSource }">
+                <TextBlock FontSize="10">8</TextBlock>
+                <TextBlock FontSize="10">9</TextBlock>
+                <TextBlock FontSize="10" >10</TextBlock>
+                <TextBlock FontSize="10">11</TextBlock>
+                <TextBlock FontSize="10" >12</TextBlock>
+            </ComboBox>
+        </StackPanel>
+        <GroupBox Grid.Row="2" Grid.ColumnSpan="3"  Header="Выберите режим работы" Margin="20,10,20,10" FontWeight="Medium"
+                  MinWidth="500" Width="Auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <StackPanel Orientation="Horizontal">
+                <RadioButton  GroupName="Mode" Content="эксперт" HorizontalAlignment="Stretch" Margin="10,10,0,10" 
+                                              Command="{Binding SelectMod}" CommandParameter="expert"></RadioButton>
+                <RadioButton GroupName="Mode" Content="технадзор" HorizontalAlignment="Stretch"  Margin="200,10,0,10"
+                                             Command="{Binding SelectMod}" CommandParameter="tehnadzor"></RadioButton>
+            </StackPanel>
+        </GroupBox>
+        <Grid Grid.Row="3" Grid.ColumnSpan="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0"  Content="Сформировать &#xD;&#xA;    ведомость" Style="{StaticResource SButton}" Margin="20,10,20,10"
+                 Command="{Binding StartWork}" CommandParameter="startSmeta">
+                <Button.ToolTip>
+                    <ToolTip>
+                        Нажмите кнопку для начала выполнения работы
+                    </ToolTip>
+                </Button.ToolTip>
+            </Button>
+            <Button   Grid.Column="1" Content="Выход" FontWeight="Medium"  Style="{StaticResource SButton}" Margin="20,10,20,10"  
+                Command="{Binding AddExit}" CommandParameter="exitSmeta">
+                <Button.ToolTip>
+                    <ToolTip>
+                        Нажмите кнопку для выхода из приложения после окончания работы
+                    </ToolTip>
+                </Button.ToolTip>
+            </Button>
+        </Grid>
+        <Grid Grid.Row="4" Grid.ColumnSpan="3" HorizontalAlignment="Stretch">
+            <TextBox Style="{StaticResource STextBox}"  Text="{Binding Path=TextErrorSm, UpdateSourceTrigger=PropertyChanged}" />
+        </Grid>
+    </Grid>
+</Page>

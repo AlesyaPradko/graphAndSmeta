@@ -1,0 +1,141 @@
+﻿<Page x:Class="WpfAppSmetaGraf.View.PageGraph"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WpfAppSmetaGraf.ViewModel"
+      mc:Ignorable="d" 
+      Title="Page2">
+    <Page.DataContext>
+        <local:MainPageViewModel></local:MainPageViewModel>
+    </Page.DataContext>
+    <Page.Resources>
+        <Style x:Key="SButton" TargetType="{x:Type Button}" BasedOn="{x:Null}">
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Height" Value="Auto"/>
+            <Setter Property="Width" Value="Auto"/>
+        </Style>
+        <Style x:Key="SLabel" TargetType="{x:Type Label}" BasedOn="{x:Null}">
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+        </Style>
+        <Style x:Key="SComboBox" TargetType="{x:Type ComboBox}" BasedOn="{x:Null}">
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Height" Value="Auto"/>
+            <Setter Property="Width" Value="Auto"/>
+            <Setter Property="MinHeight" Value="20"/>
+            <Setter Property="MinWidth" Value="100"/>
+            <Setter Property="IsEditable" Value="False"/>
+        </Style>
+        <Style x:Key="STextBox" TargetType="{x:Type TextBox}" BasedOn="{x:Null}">
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Background" Value="LightGray"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="AcceptsReturn" Value="True"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+    </Page.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.8*"/>
+            <RowDefinition Height="0.5*" />
+            <RowDefinition Height="1.5*"/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition Height="0.8*"/>
+            <RowDefinition Height="1.4*"/>
+        </Grid.RowDefinitions>
+        <Button Grid.Column="0" Content="Выбрать смету" FontWeight="Medium"  HorizontalAlignment="Stretch"  
+                 Margin="20,5,20,5" VerticalAlignment="Stretch" Width="Auto"  Height="Auto"
+                 Command="{Binding AddSmeta}" CommandParameter="ChangeSmeta" >
+            <Button.ToolTip>
+                <ToolTip>
+                    Выберите папку на вашем компьютере, содержащую сметы в формате .xlsx
+                </ToolTip>
+            </Button.ToolTip>
+        </Button>
+        <Button   Grid.Column="1" Content="       Выбрать папку &#xA;для сохранения графиков" Style="{StaticResource SButton}" Margin="20,5,20,5"         
+                 Command="{Binding AddFolder}" CommandParameter="SaveGraph">
+            <Button.ToolTip>
+                <ToolTip>
+                    Выберите папку на вашем компьютере для сохранения графика
+                </ToolTip>
+            </Button.ToolTip>
+        </Button>
+        <Button Grid.Row="1" Grid.ColumnSpan="2" Content="Начать работу"   Margin="80,1,80,5" 
+                 Command="{Binding AddFirstStart}" CommandParameter="FirstStartGraph">
+            <Button.ToolTip>
+                <ToolTip>
+                    Начните работу со сметой для определения интервала числа рбочих и количества рабочих дней
+                </ToolTip>
+            </Button.ToolTip>
+        </Button>
+        <GroupBox Grid.Row="2" Header="Выберите количество человек в бригаде  &#xA;или продолжительность работ в рабочих днях"
+                 Margin="10,10,10,10" FontWeight="Medium"  VerticalAlignment="Stretch" Grid.ColumnSpan="2">
+            <StackPanel  Orientation="Horizontal">
+                <RadioButton x:Name="People" GroupName="Amount" Content="количество человек" Margin="10,5,10,5" 
+                 Command="{Binding SelectMod}" CommandParameter="workers" Checked="People_Checked" ></RadioButton>
+                <RadioButton x:Name="Days" GroupName="Amount" Content="количество рабочих дней" Margin="60,5,10,5" 
+                 Command="{Binding SelectMod}" CommandParameter="days" Checked="People_Checked"/>
+            </StackPanel>
+        </GroupBox>
+        <Label x:Name="LabPeople"  Grid.Row="3" Grid.Column="0"  Margin="10,0,0,10" Style="{StaticResource SLabel}"
+                 Content="Выберите количество человек в бригаде" Visibility="Collapsed" />
+        <ComboBox x:Name="ComboPeople" Grid.Row="3" Grid.Column="0"  Style="{StaticResource SComboBox}"   Margin="10,20,20,0" 
+                 ItemsSource="{Binding AmountWorkers, UpdateSourceTrigger=PropertyChanged}" SelectedIndex="{Binding Path=IndexAmountWorker,
+                 Mode=OneWayToSource }" IsSynchronizedWithCurrentItem="True" Visibility="Collapsed">
+        </ComboBox>
+        <Label x:Name="LabDay"  Grid.Row="3" Grid.Column="1" Margin="10,0,0,10" Style="{StaticResource SLabel}"
+                 Content="Выберите количество рабочих дней" Visibility="Collapsed"/>
+        <ComboBox x:Name="ComboDays" Grid.Row="3" Grid.Column="1" Style="{StaticResource SComboBox}" Margin="10,20,20,0"  ItemsSource="{Binding AmountDays, UpdateSourceTrigger=PropertyChanged}"            
+                 SelectedIndex="{Binding Path=IndexAmountDays, Mode=OneWayToSource}" IsSynchronizedWithCurrentItem="True" Visibility="Collapsed" >
+        </ComboBox>
+        <Label Grid.Row="4" Grid.Column="0" Margin="10,0,0,10" Style="{StaticResource SLabel}"
+                 Content="Выберите дату начала работ" Grid.ColumnSpan="4"/>
+        <DatePicker Grid.Row="4" Grid.Column="0" HorizontalAlignment="Stretch"  Margin="10,25,20,10" VerticalAlignment="Center" 
+                 MinWidth="200"  DisplayDate="{Binding Path=DateStart, Mode=OneWayToSource}" DisplayDateStart="2011-01-01" DisplayDateEnd="2025-12-31"   />
+        <Label Grid.Row="4" Grid.Column="1" Margin="10,0,0,10" Style="{StaticResource SLabel}"
+                               Content="Выберите цвет графика" />
+        <ComboBox Grid.Row="4" Grid.Column="1"  Style="{StaticResource SComboBox}" 
+                 Margin="10,10,20,0" SelectedIndex="{Binding Path=IndexColors, Mode=OneWayToSource }" >
+            <TextBlock FontSize="10">красный</TextBlock>
+            <TextBlock FontSize="10">зеленый</TextBlock>
+            <TextBlock FontSize="10" >синий</TextBlock>
+            <TextBlock FontSize="10">желтый</TextBlock>
+            <TextBlock FontSize="10" >оранжевый</TextBlock>
+            <TextBlock FontSize="10" >голубой</TextBlock>
+            <TextBlock FontSize="10">коричневый</TextBlock>
+            <TextBlock FontSize="10" >черный</TextBlock>
+        </ComboBox>
+        <Button Grid.Row="5" Grid.Column="0" Content="Сформировать график" Style="{StaticResource SButton}"
+                 Margin="20,7,20,7"  Command="{Binding StartWork}" CommandParameter="startGraph">
+            <Button.ToolTip>
+                <ToolTip>
+                    Нажмите кнопку для начала выполнения работы
+                </ToolTip>
+            </Button.ToolTip>
+        </Button>
+        <Button Grid.Row="5" Grid.Column="1"  Content="Выход" Style="{StaticResource SButton}"
+                 Margin="20,7,20,7"  Command="{Binding AddExit }" CommandParameter="exitGraph" >
+            <Button.ToolTip>
+                <ToolTip>
+                    Нажмите кнопку для выхода из приложения после окончания работы
+                </ToolTip>
+            </Button.ToolTip>
+        </Button>
+        <TextBox Grid.Row="6" Grid.ColumnSpan="2" Style="{StaticResource STextBox}" Text="{Binding Path=TextErrorGr,
+                            UpdateSourceTrigger=PropertyChanged}"/>
+    </Grid>
+</Page>
